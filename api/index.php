@@ -1,21 +1,5 @@
 <?php
 
-$host ="localhost";
-$username = "root";
-$password = "";
-$database = "ipss_et";
-
-// Crear conexión a la base de datos
-$conn = new mysqli($host, $username, $password, $database);
-
-// verificar conección
-if ($conn->connect_error) {
-    http_response_code(500);
-    header("Content-Type: application/json; charset=UTF-8");
-    echo json_encode(["error" => "Error de conexión a la base de datos"]);
-    exit;
-}
-
 // Helper para respuestas JSON
 function jsonResponse($data, $statusCode = 200) {
     http_response_code($statusCode);
@@ -24,65 +8,13 @@ function jsonResponse($data, $statusCode = 200) {
     exit;
 }
 
-// Configurar la codificación de caracteres
-header("Content-Type: application/json; charset=UTF-8");
-// Recibir metodo de la solicitud
-$metodo = $_SERVER['REQUEST_METHOD'];
-
-// evaluar método con switch
-switch ($metodo) {
-    case 'GET':
-        // Obtener camisetas y sus tallas asociadas
-        $sql = "SELECT c.id, c.codigo_producto, c.titulo, c.club, c.pais, c.tipo, c.color, c.precio, c.detalles, 
-                       GROUP_CONCAT(t.nombre ORDER BY t.id) AS tallas
-                FROM camisetas c
-                LEFT JOIN camiseta_tallas ct ON c.id = ct.camiseta_id
-                LEFT JOIN tallas t ON ct.talla_id = t.id
-                GROUP BY c.id";
-        $result = $conn->query($sql);
-
-        if (!$result) {
-            jsonResponse(["error" => "Error al consultar camisetas"], 500);
-        }
-
-        $camisetas = [];
-        while ($row = $result->fetch_assoc()) {
-            $row['tallas'] = $row['tallas'] ? explode(',', $row['tallas']) : [];
-            $camisetas[] = $row;
-        }
-        jsonResponse($camisetas);
-        break;
-    case 'POST':
-        // Lógica para manejar solicitudes POST
-        jsonResponse(["message" => "Solicitud POST recibida"]);
-        break;
-    case 'PUT':
-        // Lógica para manejar solicitudes PUT
-        jsonResponse(["message" => "Solicitud PUT recibida"]);
-        break;
-    case 'PATCH':
-        // Lógica para manejar solicitudes PATCH
-        jsonResponse(["message" => "Solicitud PATCH recibida"]);
-        break;
-    case 'DELETE':
-        // Lógica para manejar solicitudes DELETE
-        jsonResponse(["message" => "Solicitud DELETE recibida"]);
-        break;
-    default:
-        // Método no soportado
-        jsonResponse(["error" => "Método no permitido"], 405);
-        break;
-}
-
-$conn->close();
-
-require_once __DIR__ . '/../../../api/models/Camiseta.php';
-require_once __DIR__ . '/../../../api/models/Cliente.php';
-require_once __DIR__ . '/../../../api/models/Talla.php';
+require_once __DIR__ . '/models/Camiseta.php';
+require_once __DIR__ . '/models/Cliente.php';
+require_once __DIR__ . '/models/Talla.php';
 
 // Obtener la ruta y método
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri = str_replace('/backend/api/v1', '', $uri); // Ajustar según tu estructura
+$uri = str_replace('/api', '', $uri); // Ajusta si tu endpoint es /api
 $metodo = $_SERVER['REQUEST_METHOD'];
 
 // Parsear input JSON para POST/PUT/PATCH
