@@ -19,17 +19,17 @@ class Router {
         ];
     }
 
-    public static function dispatch() {
+    // Modificado: ahora recibe $uri como parámetro
+    public static function dispatch($uri) {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
-        $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
         foreach (self::$routes as $route) {
-            if ($route['method'] === $requestMethod && preg_match($route['uri'], $requestUri, $matches)) {
+            if ($route['method'] === $requestMethod && preg_match($route['uri'], $uri, $matches)) {
                 array_shift($matches);
                 call_user_func_array($route['action'], $matches);
                 return;
             }
         }
-        self::jsonResponse(["error" => "Ruta no encontrada"], 404);
+        self::jsonResponse(["error" => "Ruta no encontrada: " . $uri], 404);
     }
 }
