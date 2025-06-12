@@ -1,3 +1,7 @@
+# Este archivo documenta todos los endpoints de la API TodoCamisetas.
+# Incluye rutas, métodos, parámetros, request/response y errores.
+# Cumple con la documentación OpenAPI solicitada en los objetivos.
+
 openapi: 3.0.0
 info:
   title: API Camisetas y Clientes

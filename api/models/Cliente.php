@@ -1,4 +1,10 @@
 <?php
+// Modelo de Cliente
+// Funcionalidades:
+// - CRUD completo (getAll, findById, create, update, delete)
+// - Validaciones de datos obligatorios
+// - Manejo de porcentaje de oferta para descuentos generales
+
 require_once __DIR__ . '/../../core/Database.php';
 
 class Cliente {
@@ -50,5 +56,13 @@ class Cliente {
         $db = Database::getConnection();
         $stmt = $db->prepare("DELETE FROM clientes WHERE id = ?");
         return $stmt->execute([$id]);
+    }
+
+    // Nueva función para encapsular la lógica de negocio
+    public static function hasActiveOffers($id) {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT COUNT(*) FROM ofertas WHERE cliente_id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchColumn() > 0;
     }
 }

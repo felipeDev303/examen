@@ -1,4 +1,10 @@
 <?php
+// Modelo de Talla
+// Funcionalidades:
+// - CRUD completo (getAll, findById, create, delete)
+// - Métodos para asociar/desasociar tallas a camisetas (addTallaToCamiseta, removeTallaFromCamiseta)
+// - Relación muchos a muchos con camisetas
+
 require_once __DIR__ . '/../../core/Database.php';
 
 class Talla {

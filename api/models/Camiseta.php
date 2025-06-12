@@ -1,4 +1,11 @@
 <?php
+// Modelo de Camiseta
+// Funcionalidades:
+// - CRUD completo (getAll, findById, create, update, delete)
+// - Relación con tallas (JOIN con camiseta_tallas y tallas)
+// - Lógica de precio final según cliente y ofertas (findByIdForClient)
+// - Validaciones de existencia y manejo de errores
+
 require_once __DIR__ . '/../../core/Database.php';
 
 // Modelo de ejemplo para Camiseta

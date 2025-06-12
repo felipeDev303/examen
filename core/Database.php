@@ -1,6 +1,7 @@
 <?php
-// Clase base para la conexión a la base de datos
+// Clase Database: gestiona la conexión PDO a la base de datos MySQL para toda la aplicación.
 
+// Clase base para la conexión a la base de datos
 class Database {
     private static $connection = null;
 
