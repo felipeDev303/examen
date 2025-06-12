@@ -1,0 +1,229 @@
+openapi: 3.0.0
+info:
+  title: API Camisetas y Clientes
+  version: "1.0"
+  description: API para gestión de camisetas y clientes B2B
+
+servers:
+  - url: /api
+
+paths:
+  /camisetas:
+    get:
+      summary: Listar camisetas
+      responses:
+        "200":
+          description: Lista de camisetas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Camiseta"
+    post:
+      summary: Crear una camiseta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CamisetaInput"
+      responses:
+        "201":
+          description: Camiseta creada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Camiseta"
+        "400":
+          description: Datos inválidos
+
+  /camisetas/{id}:
+    get:
+      summary: Obtener una camiseta por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Camiseta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Camiseta"
+        "404":
+          description: No encontrada
+    put:
+      summary: Actualizar una camiseta
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CamisetaInput"
+      responses:
+        "200":
+          description: Camiseta actualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Camiseta"
+        "400":
+          description: Datos inválidos
+        "404":
+          description: No encontrada
+    delete:
+      summary: Eliminar una camiseta
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Eliminada correctamente
+        "404":
+          description: No encontrada
+
+  /clientes:
+    get:
+      summary: Listar clientes
+      responses:
+        "200":
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cliente"
+    post:
+      summary: Crear un cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteInput"
+      responses:
+        "201":
+          description: Cliente creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+        "400":
+          description: Datos inválidos
+
+  /clientes/{id}:
+    get:
+      summary: Obtener un cliente por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+        "404":
+          description: No encontrado
+    put:
+      summary: Actualizar un cliente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteInput"
+      responses:
+        "200":
+          description: Cliente actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+        "400":
+          description: Datos inválidos
+        "404":
+          description: No encontrado
+    delete:
+      summary: Eliminar un cliente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Eliminado correctamente
+        "404":
+          description: No encontrado
+
+components:
+  schemas:
+    Camiseta:
+      type: object
+      properties:
+        id: { type: integer }
+        codigo_producto: { type: string }
+        titulo: { type: string }
+        club: { type: string, nullable: true }
+        pais: { type: string, nullable: true }
+        tipo: { type: string }
+        color: { type: string, nullable: true }
+        precio: { type: integer }
+        detalles: { type: string, nullable: true }
+        tallas:
+          type: array
+          items: { type: string }
+    CamisetaInput:
+      type: object
+      required: [codigo_producto, titulo, tipo, precio]
+      properties:
+        codigo_producto: { type: string }
+        titulo: { type: string }
+        club: { type: string, nullable: true }
+        pais: { type: string, nullable: true }
+        tipo: { type: string }
+        color: { type: string, nullable: true }
+        precio: { type: integer }
+        detalles: { type: string, nullable: true }
+    Cliente:
+      type: object
+      properties:
+        id: { type: integer }
+        nombre_comercial: { type: string }
+        rut: { type: string }
+        direccion: { type: string, nullable: true }
+        categoria: { type: string }
+        contacto_nombre: { type: string, nullable: true }
+        contacto_email: { type: string, nullable: true }
+        porcentaje_oferta: { type: number, format: float }
+    ClienteInput:
+      type: object
+      required: [nombre_comercial, rut, categoria]
+      properties:
+        nombre_comercial: { type: string }
+        rut: { type: string }
+        direccion: { type: string, nullable: true }
+        categoria: { type: string }
+        contacto_nombre: { type: string, nullable: true }
+        contacto_email: { type: string, nullable: true }
+        porcentaje_oferta: { type: number, format: float }
