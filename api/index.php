@@ -4,6 +4,16 @@ require_once __DIR__ . '/controllers/CamisetaController.php';
 require_once __DIR__ . '/controllers/ClienteController.php';
 require_once __DIR__ . '/controllers/TallaController.php';
 
+// Ajuste de base path para el enrutamiento correcto
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$base_path = '/examen/api';
+if (strpos($uri, $base_path) === 0) {
+    $uri = substr($uri, strlen($base_path));
+    if ($uri === '') $uri = '/';
+}
+// Sobrescribe REQUEST_URI para que el Router use la ruta relativa
+$_SERVER['REQUEST_URI'] = $uri;
+
 // Rutas de Camisetas
 Router::add('GET', '#^/camisetas/?$#', ['CamisetaController', 'index']);
 Router::add('POST', '#^/camisetas/?$#', ['CamisetaController', 'store']);
@@ -26,6 +36,3 @@ Router::add('DELETE', '#^/tallas/(\d+)/?$#', ['TallaController', 'destroy']);
 // Rutas de Asociación Camiseta-Talla
 Router::add('POST', '#^/camisetas/(\d+)/tallas/?$#', ['TallaController', 'addTallaToCamiseta']);
 Router::add('DELETE', '#^/camisetas/(\d+)/tallas/(\d+)/?$#', ['TallaController', 'removeTallaFromCamiseta']);
-
-Router::dispatch();
-?>

@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Si la solicitud no es un archivo o directorio real dentro de /api/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Redirige todo a /examen/api/index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
